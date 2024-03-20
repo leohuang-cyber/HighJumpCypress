@@ -14,5 +14,7 @@ module.exports = defineConfig({
     videosFolder: 'cypress/videos',
     viewportHeight: 720,
     viewportWidth: 1280,
+    defaultCommandTimeout: 30000,
+    pageLoadTimeout: 30000,
   },
 });

@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx cypress run --headed",
+    "cy:parallel":"cypress-parallel -d cypress/e2e/1-getting-started/ -t 2 -s test"
   },
-  "author": "",
+  "author": "Leo",
   "license": "ISC",
   "dependencies": {
     "cypress": "^13.6.2"

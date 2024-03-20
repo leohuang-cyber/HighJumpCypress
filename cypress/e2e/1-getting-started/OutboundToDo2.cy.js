@@ -11,13 +11,13 @@
 // please read our getting started guide:
 // https://on.cypress.io/introduction-to-cypress
 
-describe('HJ Volumn testing', () => {
+describe('Outbound Printing Module tested by CYP02', () => {
   before(() => {
     //訪問網頁
 
     cy.fixture('Config.json').then((init) => {
-      var AccountID = init.Name;
-      var Password = init.Password;
+      var AccountID = init.Name2;
+      var Password = init.Password2;
       var URL = init.Visit;
 
       // You can store parameters globally using the Cypress.config() object
@@ -64,33 +64,40 @@ describe('HJ Volumn testing', () => {
   //    cy.get('.k-textbox:eq(5)').type('5'); //載具代號
   //    cy.get('.k-textbox:eq(6)').type('6'); //配送編號
   //    cy.get('.k-textbox:eq(7)').type('7'); //發運批次號
-      cy.fixture('Data').then((data) => {
+      cy.fixture('User2Data').then((data) => {
         // 'data' now contains the content of 'fixtures/data.json'
+
+        //ERP_Site
+        cy.get('select[data-role="dropdownlist"]:eq(2)', { timeout: PLTimeout }).invoke('show'); //設定下拉選單屬性變得可見
+        cy.get('select[data-role="dropdownlist"]:eq(2)').select(7); // 使用 .select() 選擇所需的選項
+
+
         const itemList = data.Items;
         
         // Perform actions using the loaded data
         cy.log(`Total items: ${itemList.length}`);
-        console.log(`Total items: ${itemList.length}`);
-    
+        //console.log(`Total items: ${itemList.length}`);
+        
         // Example: Log values of each item
         itemList.forEach((Items, index) => {
-          console.log(`Item ${index + 1}: Value: ${Items.Carton_Label}`);
+          //console.log(`Item ${index + 1}: Value: ${Items.Carton_Label}`);
           cy.log(`Item ${index + 1}: Value: ${Items.Carton_Label}`);
           
           cy.get('.k-textbox:eq(4)').type(Items.Carton_Label); 
-          cy.get('select[data-role="dropdownlist"]:eq(11)', { timeout: PLTimeout }).invoke('show'); //設定下拉選單屬性變得可見
-          cy.get('select[data-role="dropdownlist"]:eq(11)').select(3); // 使用 .select() 選擇所需的選項
+          
+          //cy.get('select[data-role="dropdownlist"]:eq(11)', { timeout: PLTimeout }).invoke('show'); //設定下拉選單屬性變得可見
+          //cy.get('select[data-role="dropdownlist"]:eq(11)').select(3); // 使用 .select() 選擇所需的選項
           cy.contains('查詢').click();
           cy.get('[role="rowgroup"]').should('exist'); //等待rowgroup 存在
 
           //Printing
-          cy.log(`Item ${index + 1}: Value: ${Items.Carton_Label}`);
           cy.contains('span', Items.Carton_Label )
           .parents('tr')  // 讀取其在的表格行中
           .find('span:contains("[出貨明細]")') //讀取span=出貨明細
-          //.click();
+          .click();
+          
 
-          cy.get('a[data-hj-test-id="active-thread-previous-button"]', { timeout: PLTimeout }).click();
+          cy.get('a[data-hj-test-id="active-thread-previous-button"]', { timeout: PLTimeout }).should('exist').click();
           cy.get('.k-textbox:eq(4)').clear(); 
 
         });
